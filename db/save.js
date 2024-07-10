@@ -12,13 +12,13 @@
 
 /* jshint indent: 1 */
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
     return sequelize.define('skd_article', {
         id: {
             type: DataTypes.INTEGER(11),
             allowNull: false,
             primaryKey: true,
-            autoIncrement:true
+            autoIncrement: true
         },
         user_ip: {
             type: DataTypes.STRING(20),
@@ -73,6 +73,18 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true
         },
         update_time: {
+            type: DataTypes.STRING(20),
+            allowNull: true
+        },
+        area: {
+            type: DataTypes.STRING(30),
+            allowNull: true
+        },
+        classify_child: {
+            type: DataTypes.STRING(100),
+            allowNull: true
+        },
+        weight: {
             type: DataTypes.STRING(20),
             allowNull: true
         }

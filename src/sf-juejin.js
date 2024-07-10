@@ -4,6 +4,19 @@ const Profile = require("../db/save");
 const Article = require('../db/config').Article
 
 var delay = 1500
+
+//获取当前日期函数
+function getNowFormatDate() {
+    let date = new Date(),
+        year = date.getFullYear(), //获取完整的年份(4位)
+        month = date.getMonth() + 1, //获取当前月份(0-11,0代表1月)
+        strDate = date.getDate() // 获取当前日(1-31)
+    if (month < 10) month = `${month}` // 如果月份是个位数，在前面补0
+    if (strDate < 10) strDate = `${strDate}` // 如果日是个位数，在前面补0
+
+    return `${year}年${month}月${strDate}日`
+}
+
 // 以下拿掘金开刀,贡献私人测试账号
 // puppeteer.launch().then(async browser => {
 puppeteer.launch({headless: false}).then(async browser => {
@@ -85,12 +98,21 @@ puppeteer.launch({headless: false}).then(async browser => {
                     })
                     return {title, content};
                 });
+                console.log('****', result)
                 let time = Date.parse(new Date()) / 1000
+                const title = result.title[0].title
+                let newTitle = getNowFormatDate()
+                let classify_child = title.indexOf('内三元') !== -1 ? '内三元' : title.indexOf('外三元') !== -1 ? '外三元' : title.indexOf('土杂猪') !== -1 ? '土杂猪' : title.indexOf('仔猪') !== -1 ? '仔猪' : ''
+                let area = title.indexOf('全国') !== -1 ? '全国'  : '全国'
+                let weight = title.indexOf('10至14公斤') !== -1 ? '10~14公斤' : title.indexOf('15至19公斤') !== -1 ? '15~19公斤' : title.indexOf('20至30公斤') !== -1 ? '20~30公斤' : ''
                 const form = {
                     type: 0,
-                    title: result.title[0].title,
+                    title: classify_child ? newTitle + classify_child + weight + '价格' + ' (' + area + ')' : result.title[0].title,
                     content: result.content[0].content,
-                    classify: '生猪',
+                    classify_child: classify_child,
+                    area: area,
+                    classify:'生猪',
+                    weight:weight,
                     create_time: time,
                     update_time: time,
                 }
